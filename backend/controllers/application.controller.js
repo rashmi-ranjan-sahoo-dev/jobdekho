@@ -1,5 +1,5 @@
 import { Application } from "../models/applicationSchema.model.js"
-import { job } from "../models/job.model.js"
+import { Job } from "../models/job.model.js"
 
 export const applyJob = async (req,res) => {
     try {
@@ -32,7 +32,7 @@ export const applyJob = async (req,res) => {
 
         //check if the job exists
 
-        const jobExists = await job.findOne({_id: jobId});
+        const jobExists = await Job.findOne({_id: jobId});
 
         if(!jobExists){
             return res.status(404).json({
@@ -104,10 +104,10 @@ export const getAppliedJobs = async (req, res) => {
 
 // admin see how much students are applying
 
-export const getApplications = async (req,res) => {
+export const getApplicants = async (req,res) => {
     try {
         const JobId = req.params.id;
-        const job = await job.indById(JobId).populate({
+        const job = await Job.findById(JobId).populate({
             path: 'applications',
             options: { sort: { createdAt: -1}},
             populate: {

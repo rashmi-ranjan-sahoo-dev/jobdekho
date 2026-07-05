@@ -112,7 +112,7 @@ export const getJobById = async (req,res) =>{
 
 // admin get all jobs posted by him
 
-const getAdminJobs = async (req, res) =>{
+export const getAdminJobs = async (req, res) =>{
     try{
         const userId = req.user.id;
         const jobs = await Job.find({created_by: userId}).populate({

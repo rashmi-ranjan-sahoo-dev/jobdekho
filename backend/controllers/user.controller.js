@@ -2,6 +2,7 @@ import {User} from '../models/user.model.js';
 import bcrypt from "bcryptjs";
 import jwt from "jsonwebtoken";
 import dotenv from "dotenv";
+import { z } from "zod";
 
 
 dotenv.config();
@@ -11,27 +12,58 @@ dotenv.config();
 export const register = async (req,res) => {
     try{
 
-        const {fullname, email, phoneNumber,password, role} = req.body;
+        // const {fullName, email, phoneNumber,password, role} = req.body;
 
-        if(!fullname || !email || !phoneNumber || !password || !role){
+        const isValid = z.object({
+            fullName: z.
+            string().min(3, "Full name must be at least 3 characters")
+            .max(50, "Full name cannot exceed 50 chracters"),
+
+            phoneNumber: z.string()
+            .regex(/^[6-9]\d{9}$/, "Please enter a valid 10-digit phone number"),
+
+            email: z.string()
+            .email("Please enter a valid email address"),
+
+            password: z
+             .string()
+             .min(8, "Password must be at least 8 characters")
+             .regex(/[A-Z]/, "Password must contain at least one uppercase letter")
+             .regex(/[a-z]/, "Password must contain at least one lowercase letter")
+             .regex(/[0-9]/, "Password must contain at least one number")
+             .regex(/[@$!%*?&]/, "Password must contain at least one special character"),
+
+             role: z.enum([ "user", "admin"])
+            
+        })
+
+        const data = isValid.safeParse(req.body);
+
+        if(!data.success){
             return res.status(400).json({
-                message: "Something is missing",
-                success: false,
+                error: data.error.issues,
+                success: false
             })
         }
+
+         const {fullName, email, phoneNumber,password, role} = req.body;
+
+
         const hashedPassword = await bcrypt.hash(password, 10);
 
         await User.create({
-            fullname: fullname,
-            email: email,
+            fullName: fullName,
             phoneNumber: phoneNumber,
+            email: email,
             password: hashedPassword,
             role: role
         })
+
         return res.status(201).json({
             message: "User registered successfully",
             success: true,
         })
+
     } catch (error) {
         console.error("Error registering user:", error);
         return res.status(500).json({
