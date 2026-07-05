@@ -76,23 +76,41 @@ export const register = async (req,res) => {
 
 export const login = async (req, res) => {
     try{
+
+        const isValid = z.object({
+            email: z.string()
+            .email("Please enter valid email"),
+
+            password: z
+             .string()
+             .min(8, "Password must be at least 8 characters")
+             .regex(/[A-Z]/, "Password must contain at least one uppercase letter")
+             .regex(/[a-z]/, "Password must contain at least one lowercase letter")
+             .regex(/[0-9]/, "Password must contain at least one number")
+             .regex(/[@$!%*?&]/, "Password must contain at least one special character"),
+
+             role: z.enum([ "user", "admin"])
+        })
+
+        const data = isValid.safeParse(req.body);
+
+        if(!data.success){
+            res.status(400).json({
+                error: data.error.issues,
+                success: false,
+            })
+        }
+
         const {email, password, role} = req.body;
 
-        if(!email || !password || !role){
-            return res.status(400).json({
-                message: "Something is missing",
-                success: false,
-            })
-        }
+        let user = await User.findOne({ email });
 
-        const user = await User.findOne({ email});
-
-        if(!user){
-            return res.status(400).json({
-                message: "User not found",
-                success: false,
-            })
-        }
+        // if(!user){
+        //     return res.status(400).json({
+        //         message: "User not found",
+        //         success: false,
+        //     })
+        // }
 
         const isPasswordValid = await bcrypt.compare(password, user.password)
 
@@ -111,12 +129,23 @@ export const login = async (req, res) => {
         }
 
         const token = jwt.sign({ userId: user._id,role: user.role }, process.env.JWT_SECRET, { expiresIn: '7d' });
+
+        user = {
+            _id: user._id,
+            fullName: user.fullName,
+            email: user.email,
+            phoneNumber: user.phoneNumber,
+            role: user.role,
+            profile: user.profile
+        }
+
+        console.log(login);
         
-        return res.status(200).json({
-            message: "User logged in successfully",
-            success: true,
-            token: token
-        });
+      return res.status(200).cookie("token", token , {maxAge: 7 * 24 * 60 * 60 *1000, httpOnly : true, sameSite: 'strict'}).json({
+        message:`Welcome back ${user.fullName}`,
+        user,
+        success: true
+      })
 
     }catch (error) {
         console.error("Error logging in user:", error);
@@ -126,6 +155,26 @@ export const login = async (req, res) => {
         });
     }
 }
+
+   // Logout  the user 
+
+   export const logout = async (req,res) => {
+        try{
+            return res.status(200).cookie("token", {maxAge: 0}).json({
+                message: "Logged out successfully",
+                succsse: true
+            })
+         }catch(error) {
+            console.error("Error during logout" , error);
+            return res.status(500).json({
+                message: "Internal server error",
+                success: false
+            })
+         }
+
+   }
+
+
 
 export const updateProfile = async (req,res) =>{
   try{
