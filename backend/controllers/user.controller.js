@@ -133,13 +133,6 @@ export const login = async (req, res) => {
 
         let user = await User.findOne({ email });
 
-        // if(!user){
-        //     return res.status(400).json({
-        //         message: "User not found",
-        //         success: false,
-        //     })
-        // }
-
         const isPasswordValid = await bcrypt.compare(password, user.password)
 
         if(!isPasswordValid){
@@ -185,8 +178,7 @@ export const login = async (req, res) => {
 }
 
    // Logout user 
-
-   export const logout = async (req,res) => {
+export const logout = async (req,res) => {
         try{
             return res.status(200).cookie("token", {maxAge: 0}).json({
                 message: "Logged out successfully",
@@ -202,9 +194,7 @@ export const login = async (req, res) => {
 
    }
 
-
   // Update user profile
-
 export const updateProfile = async (req,res) =>{
   try{
 
@@ -265,7 +255,7 @@ export const updateProfile = async (req,res) =>{
        }
 
        //update data
-       if(fullName) user.fullname = fullname
+       if(fullName) user.fullName = fullName
         if(email) user.email = email
         if(phoneNumber)  user.phoneNumber = phoneNumber
         if(bio) user.profile.bio = bio
@@ -289,7 +279,9 @@ export const updateProfile = async (req,res) =>{
     // update resume here
     if(resume){
         const fileUri = getDataUri(resume);
-        const cloudResponse = await cloudinary.uploader.upload(fileUri.content);
+        const cloudResponse = await cloudinary.uploader.upload(fileUri.content, {
+        resource_type: "auto"
+    });
 
         user.profile.resume = cloudResponse.secure_url;
     }
@@ -301,7 +293,7 @@ export const updateProfile = async (req,res) =>{
             success:true,
             user: {
                 _id: user._id,
-                fullname : user.fullname,
+                fullName : user.fullName,
                 email:user.email,
                 phoneNumber: user.phoneNumber,
                 role: user.role,
