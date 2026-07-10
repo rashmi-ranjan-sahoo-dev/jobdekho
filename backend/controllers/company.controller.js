@@ -1,5 +1,5 @@
 import { Company} from '../models/company.model.js';
-import getDataUri from '../utils/dataUri.js';
+import getDataUri from '../utils/datauri.js';
 import cloudinary from '../utils/cloudinary.js';
 
 export const registerCompany = async (req,res) => {
@@ -22,9 +22,9 @@ export const registerCompany = async (req,res) => {
         })
        }
 
-       company = new Company.create({
+       company = await Company.create({
         name: companyName,
-        userId: req.user.id
+        userId: req.id
        })
 
         return res.status(201).json({
@@ -43,7 +43,7 @@ export const registerCompany = async (req,res) => {
 
 export const getCompany = async (req, res) => {
     try {
-        const userId = req.user.id;
+        const userId = req.id;
         const companies = await Company.find({ userId});
 
         if(!companies){
@@ -69,9 +69,9 @@ export const getCompany = async (req, res) => {
 export const getCompanyById = async (req, res) => {
     try {
         const companyId = req.params.id;
-        const comapany = await Comapany.findById(companyId);
+        const company = await Company.findById(companyId);
 
-        if(!comapany){
+        if(!company){
             return res.status(404).json({
                 message: "Company not found",
                 status: false
@@ -79,7 +79,7 @@ export const getCompanyById = async (req, res) => {
         }
 
         return res.status(200).json({
-            company: comapany,
+            company: company,
             status: true
         })
     } catch (error){
@@ -93,7 +93,7 @@ export const getCompanyById = async (req, res) => {
 
 export const updateCompany = async (req, res) => {
     try {
-        const { name, descriptionm, website, location} = req.body;
+        const { name, description, website, location} = req.body;
 
         const file = req.file;
 
@@ -105,13 +105,13 @@ export const updateCompany = async (req, res) => {
 
         const logo = cloudResponse.secure_url;
 
-        const updateDate = {
+        const updateData = {
             name, description, website, location, logo
         };
 
-        const company = await Company.findByIdAndUpdate(req.params.id, updateDate, {new : true});
+        const company = await Company.findByIdAndUpdate(req.params.id, updateData, {new : true});
 
-        if(!comapany){
+        if(!company){
             return res.status(404).json({
                 message: "Company not found",
                 success: false

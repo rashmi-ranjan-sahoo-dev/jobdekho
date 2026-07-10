@@ -123,7 +123,7 @@ export const login = async (req, res) => {
         const data = isValid.safeParse(req.body);
 
         if(!data.success){
-            res.status(400).json({
+         return res.status(400).json({
                 error: data.error.issues,
                 success: false,
             })
@@ -131,9 +131,16 @@ export const login = async (req, res) => {
 
         const {email, password, role} = req.body;
 
-        let user = await User.findOne({ email });
+       let user = await User.findOne({ email });
 
-        const isPasswordValid = await bcrypt.compare(password, user.password)
+         if(!user){
+           return res.status(400).json({
+              message: "Incorrect email or password.",
+              success: false
+               });
+           }
+           
+         const isPasswordValid = await bcrypt.compare(password, user.password);
 
         if(!isPasswordValid){
             return res.status(400).json({
@@ -283,10 +290,14 @@ export const updateProfile = async (req,res) =>{
         resource_type: "auto"
     });
 
+    console.log("resume upload successfully in cloudinary");
+
         user.profile.resume = cloudResponse.secure_url;
     }
 
        await user.save();
+
+       console.log("pofile update successfully");
 
        return res.status(200).json({
             message: "Profile update succseefully",

@@ -6,11 +6,11 @@ import { Job} from "../models/job.model.js";
 export const postJob = async (req,res) => {
     try{
         
-        const userId = req.user.id;
+        const userId = req.id;
 
-        const {title, description, requirements,salary, location, jobType, experienceLavel,position, companyId} = req.body;
+        const {title, description, requirements,salary, location, jobType, experienceLevel,position, companyId} = req.body;
 
-        if (!title || ! description || !requirements || !salary || !location || !jobType || !experienceLavel || !position || !companyId){
+        if (!title || ! description || !requirements || !salary || !location || !jobType || !experienceLevel || !position || !companyId){
             return res.status(400).json({
                 message: "Somthing is missing",
                 status: false
@@ -25,7 +25,7 @@ export const postJob = async (req,res) => {
             salary:Number(salary),
             location,
             jobType,
-            experienceLavel,
+            experienceLevel,
             position,
             companyId,
             created_by: userId
@@ -114,7 +114,7 @@ export const getJobById = async (req,res) =>{
 
 export const getAdminJobs = async (req, res) =>{
     try{
-        const userId = req.user.id;
+        const userId = req.id;
         const jobs = await Job.find({created_by: userId}).populate({
            path: "company",
            createdAt: -1

@@ -3,8 +3,8 @@ import { Job } from "../models/job.model.js"
 
 export const applyJob = async (req,res) => {
     try {
-        const userId = req.user.id;
-        const jobId = req.params.jobId;
+        const userId = req.id;
+        const jobId = req.params.id;
 
         if(!jobId){
             return res.status(400).json({
@@ -48,9 +48,10 @@ export const applyJob = async (req,res) => {
             applicant: userId,
         })
 
-        job.applicants.push(newApplication._id);
+        jobExists.applications.push(newApplication._id);
 
-        await job.save();
+        await jobExists.save();
+
         return res.status(200).json({
             message: "Application submitted successfully",
             status: true,
@@ -68,7 +69,7 @@ export const applyJob = async (req,res) => {
 
 export const getAppliedJobs = async (req, res) => {
     try {
-        const userId = req.user.id;
+        const userId = req.id;
         const applications = await Application.find({applicant: userId}).sort({createdAt: -1}).populate({
             path: "job",
             options: { sort: { createdAt: -1}},
