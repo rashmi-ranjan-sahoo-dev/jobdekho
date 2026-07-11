@@ -2,6 +2,8 @@ import { Company} from '../models/company.model.js';
 import getDataUri from '../utils/datauri.js';
 import cloudinary from '../utils/cloudinary.js';
 
+
+  //Register a new company
 export const registerCompany = async (req,res) => {
     try {
         const { companyName } = req.body;
@@ -41,10 +43,11 @@ export const registerCompany = async (req,res) => {
     }
 }
 
+ // get companies
 export const getCompany = async (req, res) => {
     try {
         const userId = req.id;
-        const companies = await Company.find({ userId});
+        const companies = await Company.find({ userId });
 
         if(!companies){
             return res.status(404).json({

@@ -5,9 +5,9 @@ import { upload } from "../middleware/mutler.js";
 
 const router = express.Router();
 
-router.route("/register").post(isAuthenticated,registerCompany);
-router.route("/get").get(isAuthenticated,getCompany);
-router.route("/get/:id").get(isAuthenticated,getCompanyById);
-router.route("/update/:id").put(isAuthenticated,upload, updateCompany);
+router.post("/register", isAuthenticated, registerCompany);
+router.get("/get", isAuthenticated, getCompany);
+router.get("/get/:id", isAuthenticated, getCompanyById);
+router.put("/update/:id", isAuthenticated, upload, updateCompany);
 
 export default router;
