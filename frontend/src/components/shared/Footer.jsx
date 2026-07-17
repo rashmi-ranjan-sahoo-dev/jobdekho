@@ -1,12 +1,12 @@
-import React from "react";
+// import React from "react";
 import { Link } from "react-router-dom";
 import {
-  Facebook,
-  Github,
-  Instagram,
-  Linkedin,
-  Twitter,
-} from "lucide-react";
+  FaFacebook,
+  FaInstagram,
+  FaLinkedin,
+  FaTwitter,
+  FaGithub,
+} from "react-icons/fa";;
 
 const Footer = () => {
   const year = new Date().getFullYear();
@@ -124,7 +124,7 @@ const Footer = () => {
               rel="noreferrer"
               className="rounded-md border p-2 transition-colors hover:bg-accent"
             >
-              <Facebook className="size-5" />
+              <FaFacebook className="size-5" />
             </a>
 
             <a
@@ -133,7 +133,7 @@ const Footer = () => {
               rel="noreferrer"
               className="rounded-md border p-2 transition-colors hover:bg-accent"
             >
-              <Twitter className="size-5" />
+              <FaTwitter className="size-5" />
             </a>
 
             <a
@@ -142,7 +142,7 @@ const Footer = () => {
               rel="noreferrer"
               className="rounded-md border p-2 transition-colors hover:bg-accent"
             >
-              <Linkedin className="size-5" />
+              <FaLinkedin className="size-5" />
             </a>
 
             <a
@@ -151,7 +151,7 @@ const Footer = () => {
               rel="noreferrer"
               className="rounded-md border p-2 transition-colors hover:bg-accent"
             >
-              <Instagram className="size-5" />
+              <FaInstagram className="size-5" />
             </a>
 
             <a
@@ -160,7 +160,7 @@ const Footer = () => {
               rel="noreferrer"
               className="rounded-md border p-2 transition-colors hover:bg-accent"
             >
-              <Github className="size-5" />
+              <FaGithub className="size-5" />
             </a>
 
           </div>

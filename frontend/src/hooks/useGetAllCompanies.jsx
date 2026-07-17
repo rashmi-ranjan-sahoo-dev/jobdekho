@@ -2,8 +2,8 @@ import { useEffect, useState } from "react";
 import { useDispatch } from "react-redux";
 import axios from "axios";
 
-import { setCompanies } from "@/redux/companySlice";
-import { COMPANY_API_END_POINT } from "@/utils/constant";
+import { setCompanies } from "../redux/companySlice";
+import { COMPANY_API_END_POINT } from "../utils/contact.js";
 
 const useGetAllCompanies = () => {
   const dispatch = useDispatch();

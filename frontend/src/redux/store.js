@@ -10,9 +10,14 @@ import {
     PURGE,
     REGISTER,
 } from 'redux-persist'
-import storage from 'redux-persist/lib/storage'
+import storageModule from 'redux-persist/lib/storage'
 import companySlice from "./companySlice";
 import applicationSlice from "./applicationSlice";
+
+// console.log(storageModule);
+// console.log(storageModule.default);
+
+const storage = storageModule.default; // use the default export of the storage module
 
 const persistConfig = {
     key: 'root',

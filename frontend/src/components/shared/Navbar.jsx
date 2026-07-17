@@ -5,21 +5,21 @@ import axios from "axios";
 import { LogOut, User2 } from "lucide-react";
 import { toast } from "sonner";
 
-import { USER_API_END_POINT } from "@/utils/constant";
-import { setUser } from "@/redux/authSlice";
+import { USER_API_END_POINT } from "../../utils/contact.js";
+import { setUser } from "../../redux/authSlice.js";
 
-import { Button } from "@/components/ui/button";
+import { Button } from "../ui/button";
 import {
   Avatar,
   AvatarImage,
   AvatarFallback,
-} from "@/components/ui/avatar";
+} from "../ui/avatar.jsx";
 
 import {
   Popover,
   PopoverContent,
   PopoverTrigger,
-} from "@/components/ui/popover";
+} from "../ui/popover.jsx";
 
 const Navbar = () => {
   const { user } = useSelector((store) => store.auth);

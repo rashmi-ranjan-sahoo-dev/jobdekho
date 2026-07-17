@@ -8,7 +8,7 @@ import axios from "axios";
 import { USER_API_END_POINT } from "../../utils/contact.js";
 import { toast } from "sonner";
 import { useDispatch, useSelector } from "react-redux";
-import { setLoading } from "@/redux/authSlice";
+import { setLoading } from "../../redux/authSlice";
 import { Loader2 } from "lucide-react";
 
 const Signup = () => {
@@ -54,14 +54,14 @@ const Signup = () => {
 
     const formData = new FormData();
 
-    formData.append("fullname", input.fullname);
+    formData.append("fullName", input.fullName);
     formData.append("email", input.email);
     formData.append("phoneNumber", input.phoneNumber);
     formData.append("password", input.password);
     formData.append("role", input.role);
 
     if (input.file) {
-      formData.append("file", input.file);
+      formData.append("profilePhoto", input.file);
     }
 
     try {
@@ -83,6 +83,11 @@ const Signup = () => {
         navigate("/login");
       }
     } catch (error) {
+
+  console.log(error);
+  console.log(error.response);
+  console.log(error.response?.data);
+
       toast.error(
         error.response?.data?.message || "Something went wrong!"
       );
@@ -115,9 +120,9 @@ const Signup = () => {
             <Label>Full Name</Label>
             <Input
               type="text"
-              name="fullname"
+              name="fullName"
               placeholder="John Doe"
-              value={input.fullname}
+              value={input.fullName}
               onChange={changeEventHandler}
               required
             />

@@ -33,7 +33,7 @@ export const register = async (req,res) => {
              .regex(/[0-9]/, "Password must contain at least one number")
              .regex(/[@$!%*?&]/, "Password must contain at least one special character"),
 
-             role: z.enum([ "user", "admin"])
+             role: z.enum([ "user", "admin","recruiter"])
             
         })
 
