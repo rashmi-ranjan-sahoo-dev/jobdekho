@@ -5,6 +5,7 @@ import LatestJobCards from "./LatestJobCards";
 
 const LatestJobs = () => {
   const { allJobs } = useSelector((store) => store.job);
+  console.log(allJobs);
 
   return (
     <section className="max-w-7xl mx-auto my-20 px-4">

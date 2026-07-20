@@ -24,8 +24,12 @@ const useGetAppliedJobs = () => {
           }
         );
 
+      
+        console.log(res.data);
+
+
         if (res.data.success) {
-          dispatch(setAllAppliedJobs(res.data.application));
+          dispatch(setAllAppliedJobs(res.data.applications));
         }
       } catch (error) {
         if (!axios.isCancel(error)) {
